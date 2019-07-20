@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<title>weather data</title>
+<head>
+	<!-- <link rel="stylesheet" type="text/css" href="../static/main.css"> -->
+	<script  src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body style="background-image:url({{ url_for('static', filename='a.jpg')}}) ; background-size: 100% 160%" >
+	<center>
+	<div class="container">
+		<h1 style="font-size: 60px; margin-top: 0px; padding-top: 20px; margin-bottom: 20px; color: #00CED1;
+		 text-shadow: 0 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);">weather info.</h1>
+<div>
+		<div style="width: 50%;">
+		<form id="idForm" action="/db" method="get">
+			<input pattern="(?=.*[A-Z])(?=.*[a-z]).{1,}" title="first letter should be in uppercase" style="margin-bottom: 15px; width: 200px; height: 25px; background: lightgrey; color: blue;" placeholder =  "    enter city name or zip code"  type="text" name="city" required>
+	
+			<button id="db" style="width: 200px; height: 30px; background: none; color: #3498db;" type="search" >search from database</button>
+
+		</form>
+		</div>
+		<br>
+		<div style="width: 50%;"> 
+		<form id="fetchForm" action="/insert" method="get">
+			<input pattern="(?=.*[A-Z])(?=.*[a-z]).{1,}" style="margin-bottom: 10px; width: 200px; height: 25px;background: lightgrey; color: blue" placeholder= "    enter city name or zip code" type="text" name="city" required>
+	
+			<button id="insert" style="width: 120px; height: 30px; background: none; color: #3498db; " type="search" >updated search</button>
+
+		</form><br>
+		<form id="full" action="/data" method="get">
+			
+			<button id="data" style="width: 120px; height: 30px;  background: none; color: #3498db;" type="search" >show all data</button>
+
+		</form><br><br>
+	</div>
+</div>		<br><br><br>
+		
+<table class="data_table" border=  "2px solid black " style="width:100%; border: 4px solid black; border-collapse: collapse;">
+  <tr>
+    <th>city</th>
+    <th>temp</th> 
+    <th>pressure</th>
+    <th>humidity</th>
+    <th>min-temp</th>
+    <th>max-temp</th>
+    <th>date-time</th>
+  </tr>
+  <tr >
+    <td><div id="result0" style="font-size: 20px;width: 100%;color: #000000"></div><br></td>
+    <td><div id="result1" style="font-size: 20px;width: 100%;color: #000000;"></div><br></td>
+    <td><div id="result2" style="font-size: 20px;width: 100%;color: #000000;"></div><br></td>
+    <td><div id="result3" style="font-size: 20px;width: 100%;color: #000000;"></div><br></td>
+    <td><div id="result4" style="font-size: 20px;width: 100%;color: #000000;"></div><br></td>
+    <td><div id="result5" style="font-size: 20px;width: 100%; color: #000000;"></div><br></td>
+    <td><div id="result6" style="font-size: 20px;width: 100%; color: #000000;"></div></td>
+  </tr>
+  <tr>
+    <td><div id="result00" style="font-size: 20px;width: 100%;color: #000000"></div><br></td>
+    <td><div id="result11" style="font-size: 20px;width: 100%;color: #000000"></div><br></td>
+    <td><div id="result22" style="font-size: 20px;width: 100%;color: #000000"></div><br></td>
+    <td><div id="result33" style="font-size: 20px;width: 100%;color: #000000"></div><br></td>
+    <td><div id="result44" style="font-size: 20px;width: 100%;color: #000000"></div><br></td>
+    <td><div id="result55" style="font-size: 20px;width: 100%; color: #000000"></div><br></td>
+    <td><div id="result66" style="font-size: 20px;width: 100%; color: #000000;"></div></td>
+  </tr>
+</table>
+
+	</div>
+</center>
+</body>
+	<script>
+	$("#idForm").submit(function(e) {
+
+	    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+	    var form = $(this);
+	    var url = form.attr('action');
+
+	    $.ajax({
+	           type: "get",
+	           url: url,
+	           data: form.serialize(), // serializes the form's elements.
+	           success: function(data)
+	           {
+	           	data = data.slice(1, data.length-1);
+	           	result = data.split(", ");
+	           	$("#result0").html(result[0] + " <br>");
+	           	$("#result1").html(result[1] + "<br>");
+	           	$("#result2").html(result[2] + "<br>");
+	           	$("#result3").html(result[3] + "<br>");
+	           	$("#result4").html(result[4] + "<br>");
+	           	$("#result5").html(result[5] + "<br>");
+	           	$("#result6").html(result[6] + "<br>");
+
+
+	               console.log(result); // show response from the php script.
+	           },
+	           error: function(err)
+	           {
+	           	console.log(err);
+	           }
+	         });
+	});
+     </script>
+     <script>
+	$("#fetchForm").submit(function(e) {
+
+	    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+	    var form = $(this);
+	    var url = form.attr('action');
+
+	    $.ajax({
+	           type: "get",
+	           url: url,
+	           data: form.serialize(), // serializes the form's elements.
+	           success: function(data)
+	           {
+	           	data = data.slice(1, data.length-1);
+	           	result = data.split(", ");
+	           	$("#result00").html(result[0] + "<br>");
+	           	$("#result11").html(result[1] + "<br>");
+	           	$("#result22").html(result[2] + "<br>");
+	           	$("#result33").html(result[3] + "<br>");
+	           	$("#result44").html(result[4] + "<br>");
+	           	$("#result55").html(result[5] + "<br>");
+	           	$("#result66").html(result[6] + "<br>");
+
+
+	               console.log(result); // show response from the php script.
+	           },
+	           error: function(err)
+	           {
+	           	console.log(err);
+	           }
+	         });
+	});
+     </script>
+     <script>
+	$("#full").submit(function(e) {
+
+	    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+	    var form = $(this);
+	    var url = form.attr('action');
+
+	    $.ajax({
+	           type: "get",
+	           url: url,
+	           data: form.serialize(), // serializes the form's elements.
+	           success: function(data)
+	           {
+	           	data = data["result"];
+	           	console.log(data.length);
+	           	for(i=0;i<data.length;i++)
+	           	{
+		           	n_data = data[i].slice();
+		           	console.log(n_data);
+		           	result = n_data //.split(", ");
+
+		           	$(".data_table").append(`
+		           		<tr>
+		           	<td><div id="result0" style="font-size: 20px;width: 100%;color: #000000">${result[0]}</div><br></td>
+				    <td><div id="result1" style="font-size: 20px;width: 100%;color: #000000">${result[
+				    	1]}</div><br></td>
+				    <td><div id="result2" style="font-size: 20px;width: 100%;color: #000000">${result[2]}</div><br></td>
+				    <td><div id="result3" style="font-size: 20px;width: 100%;color: #000000">${result[3]}</div><br></td>
+				    <td><div id="result4" style="font-size: 20px;width: 100%;color: #000000">${result[4]}</div><br></td>
+				    <td><div id="result5" style="font-size: 20px;width: 100%;color: #000000">${result[5]}</div><br></td>
+				    <td><div id="result6" style="font-size: 20px;width: 100%;color: #000000">${result[6]}</div><br></td></tr>` 
+	            );
+
+	              // console.log(result); // show response from the php script.
+	           }
+	         }
+	     });
+	});
+     </script>
+</html>

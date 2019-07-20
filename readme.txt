@@ -1,0 +1,1 @@
+run script and go to the local host generated.
